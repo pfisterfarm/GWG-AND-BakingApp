@@ -89,6 +89,16 @@ public class RecipeDetailFragment extends Fragment {
 
             mIngredientsAdapter.setIngredientData(mIngredients);
             mStepsAdapter.setStepData(mSteps);
+            steps_rv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, StepDetailActivity.class);
+                    intent.putExtra(RecipeDetailFragment.ARG_ITEM_ID, (Step) view.getTag());
+
+                    context.startActivity(intent);
+                }
+            });
 
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
@@ -109,7 +119,7 @@ public class RecipeDetailFragment extends Fragment {
         ingredients_rv.setAdapter(mIngredientsAdapter);
         mStepsAdapter = new StepsRecyclerViewAdapter(this, mSteps);
         steps_rv.setAdapter(mStepsAdapter);
-        steps_rv.setOnClickListener(mStepsAdapter.getOnClickListener());
+//        steps_rv.setOnClickListener(mStepsAdapter.getOnClickListener());
     }
 
 
