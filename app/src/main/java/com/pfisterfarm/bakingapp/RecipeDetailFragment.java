@@ -3,6 +3,8 @@ package com.pfisterfarm.bakingapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
@@ -19,9 +21,12 @@ import com.pfisterfarm.bakingapp.model.IngredientsRecyclerViewAdapter;
 import com.pfisterfarm.bakingapp.model.Recipe;
 import com.pfisterfarm.bakingapp.model.Step;
 import com.pfisterfarm.bakingapp.model.StepsRecyclerViewAdapter;
+import com.pfisterfarm.bakingapp.utils.helpers;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A fragment representing a single Recipe detail screen.
@@ -35,6 +40,9 @@ public class RecipeDetailFragment extends Fragment {
      * represents.
      */
     public static final String ARG_ITEM_ID = "item_id";
+    public static final String RECIPE_NAME = "recipe_name";
+    public static final String INGREDIENT_SET = "ingredient_set";
+
     private Recipe mRecipe;
     private RecyclerView ingredients_rv;
     private RecyclerView steps_rv;
@@ -59,6 +67,17 @@ public class RecipeDetailFragment extends Fragment {
         if (getArguments().containsKey(ARG_ITEM_ID)) {
 
             mRecipe = getArguments().getParcelable(ARG_ITEM_ID);
+
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
+            SharedPreferences.Editor edit = pref.edit();
+            ArrayList<Ingredient> storeIngredients = mRecipe.getIngredients();
+            Set ingredientSet = new HashSet();
+            for (Ingredient ingredient : storeIngredients) {
+                ingredientSet.add(helpers.displayAmount(ingredient.getQuantity(), ingredient.getMeasure()) + ingredient.getIngredient());
+            }
+            edit.putString(RECIPE_NAME, mRecipe.getName());
+            edit.putStringSet(INGREDIENT_SET, ingredientSet);
+            edit.commit();
 
             ingredients_rv = activity.findViewById(R.id.ingredients_list);
             mIngredients = mRecipe.getIngredients();

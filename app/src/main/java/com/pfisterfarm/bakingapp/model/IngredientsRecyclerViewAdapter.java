@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.pfisterfarm.bakingapp.R;
 import com.pfisterfarm.bakingapp.RecipeDetailFragment;
+import com.pfisterfarm.bakingapp.utils.helpers;
 
 import java.util.ArrayList;
 
@@ -41,8 +42,7 @@ public class IngredientsRecyclerViewAdapter
     public void onBindViewHolder(final IngredientsRecyclerViewAdapter.ViewHolder holder, int position) {
 
         holder.mIngredientDetail.setText(
-                mIngredients.get(position).getQuantity() + " " +
-                        mIngredients.get(position).getMeasure() + " " +
+                helpers.displayAmount(mIngredients.get(position).getQuantity(), mIngredients.get(position).getMeasure()) +
                         mIngredients.get(position).getIngredient()
         );
 
