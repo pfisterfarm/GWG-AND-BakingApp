@@ -24,12 +24,13 @@ import com.pfisterfarm.bakingapp.model.Recipe;
  */
 public class RecipeDetailActivity extends AppCompatActivity {
 
+    private final static String SCREEN_MODE = "screen_mode";
+    private boolean mTwoPane = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -46,6 +47,11 @@ public class RecipeDetailActivity extends AppCompatActivity {
         //
         // http://developer.android.com/guide/components/fragments.html
         //
+
+        if (findViewById(R.id.step_fragment_container) != null) {
+            mTwoPane = true;
+        }
+
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
@@ -54,6 +60,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
             Bundle arguments = new Bundle();
             arguments.putParcelable(RecipeDetailFragment.ARG_ITEM_ID,
                     getIntent().getParcelableExtra(RecipeDetailFragment.ARG_ITEM_ID));
+            arguments.putBoolean(SCREEN_MODE, mTwoPane);
             RecipeDetailFragment fragment = new RecipeDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

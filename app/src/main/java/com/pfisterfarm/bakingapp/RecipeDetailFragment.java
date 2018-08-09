@@ -42,6 +42,7 @@ public class RecipeDetailFragment extends Fragment {
     public static final String ARG_ITEM_ID = "item_id";
     public static final String RECIPE_NAME = "recipe_name";
     public static final String INGREDIENT_SET = "ingredient_set";
+    public static final String SCREEN_MODE = "screen_mode";
 
     private Recipe mRecipe;
     private RecyclerView ingredients_rv;
@@ -50,6 +51,7 @@ public class RecipeDetailFragment extends Fragment {
     private ArrayList<Step> mSteps;
     private IngredientsRecyclerViewAdapter mIngredientsAdapter;
     private StepsRecyclerViewAdapter mStepsAdapter;
+    private boolean mTwoPane;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -62,11 +64,12 @@ public class RecipeDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Activity activity = this.getActivity();
+        final Activity activity = this.getActivity();
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
 
             mRecipe = getArguments().getParcelable(ARG_ITEM_ID);
+            mTwoPane = getArguments().getBoolean(SCREEN_MODE);
 
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
             SharedPreferences.Editor edit = pref.edit();
@@ -89,21 +92,28 @@ public class RecipeDetailFragment extends Fragment {
 
             mIngredientsAdapter.setIngredientData(mIngredients);
             mStepsAdapter.setStepData(mSteps);
-            steps_rv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, StepDetailActivity.class);
-                    intent.putExtra(RecipeDetailFragment.ARG_ITEM_ID, (Step) view.getTag());
+//            steps_rv.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (!mTwoPane) {
+//                        Context context = view.getContext();
+//                        Intent intent = new Intent(context, StepDetailActivity.class);
+//                        intent.putExtra(RecipeDetailFragment.ARG_ITEM_ID, (Step) view.getTag());
+//
+//                        context.startActivity(intent);
+//                    } else {
+//                        Bundle arguments = new Bundle();
+//                        arguments.putParcelable(ARG_ITEM_ID,
+//                                (Step) view.getTag());
+//                        StepDetailFragment fragment = new StepDetailFragment();
+//                        fragment.setArguments(arguments);
+//                        getFragmentManager().beginTransaction()
+//                                .add(R.id.step_fragment_container, fragment)
+//                                .commit();
+//                    }
+//                }
+//            });
 
-                    context.startActivity(intent);
-                }
-            });
-
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mRecipe.getName());
-            }
         }
     }
 
@@ -117,9 +127,9 @@ public class RecipeDetailFragment extends Fragment {
     private void setupRecyclerViews() {
         mIngredientsAdapter = new IngredientsRecyclerViewAdapter(this, mIngredients);
         ingredients_rv.setAdapter(mIngredientsAdapter);
-        mStepsAdapter = new StepsRecyclerViewAdapter(this, mSteps);
+        mStepsAdapter = new StepsRecyclerViewAdapter(this, mSteps, mTwoPane);
         steps_rv.setAdapter(mStepsAdapter);
-//        steps_rv.setOnClickListener(mStepsAdapter.getOnClickListener());
+
     }
 
 

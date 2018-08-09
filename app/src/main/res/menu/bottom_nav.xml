@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_previous"
+        android:enabled="true"
+        android:icon="@drawable/hand_left"
+        android:checkable="false"
+        android:checked="false"
+        android:title="Previous"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_top_rated"
+        android:enabled="false"
+        android:checkable="false"
+        android:checked="false"
+        android:title="Step x of y"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_next"
+        android:enabled="false"
+        android:icon="@drawable/hand_right"
+        android:checkable="false"
+        android:checked="false"
+        android:title="Next"
+        app:showAsAction="ifRoom" />
+</menu>

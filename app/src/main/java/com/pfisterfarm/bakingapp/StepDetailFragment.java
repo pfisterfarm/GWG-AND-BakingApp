@@ -17,6 +17,9 @@ import static com.pfisterfarm.bakingapp.RecipeDetailFragment.ARG_ITEM_ID;
 
 public class StepDetailFragment extends Fragment {
 
+    private TextView stepInstructionsTV;
+    private Step mStep;
+
     public StepDetailFragment() {
     }
 
@@ -28,10 +31,7 @@ public class StepDetailFragment extends Fragment {
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
 
-            Step mStep = getArguments().getParcelable(ARG_ITEM_ID);
-
-            TextView stepInstructionsTV = activity.findViewById(R.id.step_detail);
-            stepInstructionsTV.setText(mStep.getDescription());
+            mStep = getArguments().getParcelable(ARG_ITEM_ID);
 
             }
         }
@@ -40,6 +40,12 @@ public class StepDetailFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.step_detail_fragment, container, false);
+        stepInstructionsTV = rootView.findViewById(R.id.step_instructions);
+        stepInstructionsTV.setText(mStep.getDescription());
         return rootView;
+    }
+
+    public void setStepDescription(String newText) {
+        stepInstructionsTV.setText(newText);
     }
 }

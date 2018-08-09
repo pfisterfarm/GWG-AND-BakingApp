@@ -2,6 +2,8 @@ package com.pfisterfarm.bakingapp.model;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,29 +14,51 @@ import com.pfisterfarm.bakingapp.R;
 import com.pfisterfarm.bakingapp.RecipeDetailActivity;
 import com.pfisterfarm.bakingapp.RecipeDetailFragment;
 import com.pfisterfarm.bakingapp.StepDetailActivity;
+import com.pfisterfarm.bakingapp.StepDetailFragment;
 
 import java.util.ArrayList;
+
+import static com.pfisterfarm.bakingapp.RecipeDetailFragment.ARG_ITEM_ID;
 
 public class StepsRecyclerViewAdapter
         extends RecyclerView.Adapter<StepsRecyclerViewAdapter.ViewHolder> {
 
     private final RecipeDetailFragment mParentActivity;
+    private StepDetailFragment fragment;
     private ArrayList<Step> mSteps;
+    private boolean mTwoPane;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Context context = view.getContext();
-            Intent intent = new Intent(context, StepDetailActivity.class);
-            intent.putExtra(RecipeDetailFragment.ARG_ITEM_ID, (Step) view.getTag());
+            if (!mTwoPane) {
+                Intent intent = new Intent(context, StepDetailActivity.class);
+                intent.putExtra(ARG_ITEM_ID, (Step) view.getTag());
 
-            context.startActivity(intent);
+                context.startActivity(intent);
+            } else {
+                if (fragment == null) {
+                    Bundle arguments = new Bundle();
+                    arguments.putParcelable(ARG_ITEM_ID,
+                            (Step) view.getTag());
+                    fragment = new StepDetailFragment();
+                    fragment.setArguments(arguments);
+                    ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
+                            .add(R.id.step_fragment_container, fragment)
+                            .commit();
+                } else {
+                    fragment.setStepDescription(((Step) view.getTag()).getDescription());
+                }
+            }
+
         }
     };
 
     public StepsRecyclerViewAdapter(RecipeDetailFragment parent,
-                             ArrayList<Step> steps) {
+                             ArrayList<Step> steps, boolean twoPane) {
         mSteps = steps;
         mParentActivity = parent;
+        mTwoPane = twoPane;
     }
 
     @Override
@@ -64,9 +88,9 @@ public class StepsRecyclerViewAdapter
         }
     }
 
-    public View.OnClickListener getOnClickListener() {
-        return mOnClickListener;
-    }
+//    public View.OnClickListener getOnClickListener() {
+//        return mOnClickListener;
+//    }
 
     public void setStepData(ArrayList<Step> incomingSteps) {
         mSteps = incomingSteps;
