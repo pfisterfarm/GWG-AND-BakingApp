@@ -10,7 +10,7 @@
         android:title="Previous"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_top_rated"
+        android:id="@+id/display_step_no"
         android:enabled="false"
         android:checkable="false"
         android:checked="false"
@@ -18,7 +18,7 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_next"
-        android:enabled="false"
+        android:enabled="true"
         android:icon="@drawable/hand_right"
         android:checkable="false"
         android:checked="false"

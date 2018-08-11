@@ -23,6 +23,9 @@ import static com.pfisterfarm.bakingapp.RecipeDetailFragment.ARG_ITEM_ID;
 public class StepsRecyclerViewAdapter
         extends RecyclerView.Adapter<StepsRecyclerViewAdapter.ViewHolder> {
 
+    private static final String STEP_SELECTED = "step_selected";
+    private static final String RECIPE_STEPS = "recipe_steps";
+
     private final RecipeDetailFragment mParentActivity;
     private StepDetailFragment fragment;
     private ArrayList<Step> mSteps;
@@ -33,21 +36,22 @@ public class StepsRecyclerViewAdapter
             Context context = view.getContext();
             if (!mTwoPane) {
                 Intent intent = new Intent(context, StepDetailActivity.class);
-                intent.putExtra(ARG_ITEM_ID, (Step) view.getTag());
+                intent.putParcelableArrayListExtra(RECIPE_STEPS, mSteps);
+                intent.putExtra(STEP_SELECTED, (int) view.getTag());
 
                 context.startActivity(intent);
             } else {
                 if (fragment == null) {
                     Bundle arguments = new Bundle();
                     arguments.putParcelable(ARG_ITEM_ID,
-                            (Step) view.getTag());
+                            (Step) mSteps.get((int)view.getTag()));
                     fragment = new StepDetailFragment();
                     fragment.setArguments(arguments);
                     ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
                             .add(R.id.step_fragment_container, fragment)
                             .commit();
                 } else {
-                    fragment.setStepDescription(((Step) view.getTag()).getDescription());
+                    fragment.setStepDescription(mSteps.get((int)view.getTag()).getDescription());
                 }
             }
 
@@ -75,7 +79,7 @@ public class StepsRecyclerViewAdapter
                 (position + 1) + ". " + mSteps.get(position).getShortDescription()
         );
 
-        holder.itemView.setTag(mSteps.get(position));
+        holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(mOnClickListener);
     }
 
