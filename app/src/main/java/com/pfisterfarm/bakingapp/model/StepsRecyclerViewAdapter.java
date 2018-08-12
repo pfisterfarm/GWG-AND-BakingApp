@@ -52,6 +52,8 @@ public class StepsRecyclerViewAdapter
                             .commit();
                 } else {
                     fragment.setStepDescription(mSteps.get((int)view.getTag()).getDescription());
+                    fragment.releasePlayer();
+                    fragment.setStepVisual(mSteps.get((int)view.getTag()));
                 }
             }
 
@@ -76,7 +78,7 @@ public class StepsRecyclerViewAdapter
     public void onBindViewHolder(final StepsRecyclerViewAdapter.ViewHolder holder, int position) {
 
         holder.mStep.setText(
-                (position + 1) + ". " + mSteps.get(position).getShortDescription()
+                position  + ". " + mSteps.get(position).getShortDescription()
         );
 
         holder.itemView.setTag(position);

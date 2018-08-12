@@ -57,15 +57,22 @@ public class RecipeDetailActivity extends AppCompatActivity {
             // using a fragment transaction.
             Recipe testRecipe = getIntent().getParcelableExtra(RecipeDetailFragment.ARG_ITEM_ID);
             Log.d("bakingapp", testRecipe.getName());
+            setTitle(testRecipe.getName());
             Bundle arguments = new Bundle();
             arguments.putParcelable(RecipeDetailFragment.ARG_ITEM_ID,
                     getIntent().getParcelableExtra(RecipeDetailFragment.ARG_ITEM_ID));
             arguments.putBoolean(SCREEN_MODE, mTwoPane);
             RecipeDetailFragment fragment = new RecipeDetailFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.recipe_detail_container, fragment)
-                    .commit();
+            if (!mTwoPane) {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.recipe_detail_container, fragment)
+                        .commit();
+            } else {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.recipe_detail_container_twopane, fragment)
+                        .commit();
+            }
         }
     }
 

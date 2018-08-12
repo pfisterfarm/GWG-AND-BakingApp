@@ -92,27 +92,6 @@ public class RecipeDetailFragment extends Fragment {
 
             mIngredientsAdapter.setIngredientData(mIngredients);
             mStepsAdapter.setStepData(mSteps);
-//            steps_rv.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if (!mTwoPane) {
-//                        Context context = view.getContext();
-//                        Intent intent = new Intent(context, StepDetailActivity.class);
-//                        intent.putExtra(RecipeDetailFragment.ARG_ITEM_ID, (Step) view.getTag());
-//
-//                        context.startActivity(intent);
-//                    } else {
-//                        Bundle arguments = new Bundle();
-//                        arguments.putParcelable(ARG_ITEM_ID,
-//                                (Step) view.getTag());
-//                        StepDetailFragment fragment = new StepDetailFragment();
-//                        fragment.setArguments(arguments);
-//                        getFragmentManager().beginTransaction()
-//                                .add(R.id.step_fragment_container, fragment)
-//                                .commit();
-//                    }
-//                }
-//            });
 
         }
     }

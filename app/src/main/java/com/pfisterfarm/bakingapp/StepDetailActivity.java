@@ -71,12 +71,14 @@ public class StepDetailActivity extends AppCompatActivity {
                         case R.id.action_previous:
                             if (mCurrentStep > 0) {
                                 mCurrentStep--;
+                                fragment.releasePlayer();
                                 loadStepData(mCurrentStep);
                             }
                             break;
                         case R.id.action_next:
                             if (mCurrentStep < maxSteps-1) {
                                 mCurrentStep++;
+                                fragment.releasePlayer();
                                 loadStepData(mCurrentStep);
                             }
                             break;
@@ -89,8 +91,8 @@ public class StepDetailActivity extends AppCompatActivity {
 
         private void loadStepData(int whatStep) {
             fragment.setStepDescription(mSteps.get(whatStep).getDescription());
+            fragment.setStepVisual(mSteps.get(whatStep));
             bott_nav.getMenu().findItem(R.id.display_step_no).setTitle("Step " + (whatStep + 1) + " of " + maxSteps);
-            // need logic to load thumbnails/videos here
-            // plus probably some other stuff in the future
+
         }
 }
