@@ -25,11 +25,13 @@ public class StepsRecyclerViewAdapter
 
     private static final String STEP_SELECTED = "step_selected";
     private static final String RECIPE_STEPS = "recipe_steps";
+    private static final String RECIPE_NAME = "recipe_name";
 
     private final RecipeDetailFragment mParentActivity;
     private StepDetailFragment fragment;
     private ArrayList<Step> mSteps;
     private boolean mTwoPane;
+    private String mRecipeName;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -37,6 +39,7 @@ public class StepsRecyclerViewAdapter
             if (!mTwoPane) {
                 Intent intent = new Intent(context, StepDetailActivity.class);
                 intent.putParcelableArrayListExtra(RECIPE_STEPS, mSteps);
+                intent.putExtra(RECIPE_NAME, mRecipeName);
                 intent.putExtra(STEP_SELECTED, (int) view.getTag());
 
                 context.startActivity(intent);
@@ -61,10 +64,11 @@ public class StepsRecyclerViewAdapter
     };
 
     public StepsRecyclerViewAdapter(RecipeDetailFragment parent,
-                             ArrayList<Step> steps, boolean twoPane) {
+                             ArrayList<Step> steps, boolean twoPane, String recipeName) {
         mSteps = steps;
         mParentActivity = parent;
         mTwoPane = twoPane;
+        mRecipeName = recipeName;
     }
 
     @Override

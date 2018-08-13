@@ -82,16 +82,6 @@ public class RecipeDetailFragment extends Fragment {
             edit.putStringSet(INGREDIENT_SET, ingredientSet);
             edit.commit();
 
-            ingredients_rv = activity.findViewById(R.id.ingredients_list);
-            mIngredients = mRecipe.getIngredients();
-
-            steps_rv = activity.findViewById(R.id.steps_list);
-            mSteps = mRecipe.getSteps();
-
-            setupRecyclerViews();
-
-            mIngredientsAdapter.setIngredientData(mIngredients);
-            mStepsAdapter.setStepData(mSteps);
 
         }
     }
@@ -100,13 +90,25 @@ public class RecipeDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recipe_detail, container, false);
+
+        ingredients_rv = container.findViewById(R.id.ingredients_list);
+        mIngredients = mRecipe.getIngredients();
+
+        steps_rv = container.findViewById(R.id.steps_list);
+        mSteps = mRecipe.getSteps();
+
+        setupRecyclerViews();
+
+        mIngredientsAdapter.setIngredientData(mIngredients);
+        mStepsAdapter.setStepData(mSteps);
+
         return rootView;
     }
 
     private void setupRecyclerViews() {
         mIngredientsAdapter = new IngredientsRecyclerViewAdapter(this, mIngredients);
         ingredients_rv.setAdapter(mIngredientsAdapter);
-        mStepsAdapter = new StepsRecyclerViewAdapter(this, mSteps, mTwoPane);
+        mStepsAdapter = new StepsRecyclerViewAdapter(this, mSteps, mTwoPane, mRecipe.getName());
         steps_rv.setAdapter(mStepsAdapter);
 
     }

@@ -19,11 +19,13 @@ public class StepDetailActivity extends AppCompatActivity {
 
     private static final String RECIPE_STEPS = "recipe_steps";
     private static final String STEP_SELECTED = "step_selected";
+    private static final String RECIPE_NAME = "recipe_name";
 
     private BottomNavigationView bott_nav;
     private ArrayList<Step> mSteps;
     private int maxSteps;
     private int mCurrentStep;
+    private String mRecipeName;
     private StepDetailFragment fragment;
 
     @Override
@@ -50,6 +52,8 @@ public class StepDetailActivity extends AppCompatActivity {
 
             mSteps = getIntent().getParcelableArrayListExtra(RECIPE_STEPS);
             mCurrentStep = getIntent().getIntExtra(STEP_SELECTED, 0);
+            mRecipeName = getIntent().getStringExtra(RECIPE_NAME);
+            setTitle(mRecipeName);
             maxSteps = mSteps.size();
 
             // Create the detail fragment and add it to the activity
@@ -62,34 +66,48 @@ public class StepDetailActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.step_fragment_container, fragment)
                     .commit();
-            bott_nav = findViewById(R.id.step_navigation);
-            bott_nav.getMenu().findItem(R.id.display_step_no).setTitle("Step " + (mCurrentStep + 1) + " of " + maxSteps);
-            bott_nav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.action_previous:
-                            if (mCurrentStep > 0) {
-                                mCurrentStep--;
-                                fragment.releasePlayer();
-                                loadStepData(mCurrentStep);
-                            }
-                            break;
-                        case R.id.action_next:
-                            if (mCurrentStep < maxSteps-1) {
-                                mCurrentStep++;
-                                fragment.releasePlayer();
-                                loadStepData(mCurrentStep);
-                            }
-                            break;
-                    }
-                    return true;
-                }
-            });
+        } else {
+            mSteps = savedInstanceState.getParcelableArrayList(RECIPE_STEPS);
+            mCurrentStep = savedInstanceState.getInt(STEP_SELECTED);
+            mRecipeName = savedInstanceState.getString(RECIPE_NAME);
+            setTitle(mRecipeName);
+            maxSteps = mSteps.size();
         }
+        bott_nav = findViewById(R.id.step_navigation);
+        bott_nav.getMenu().findItem(R.id.display_step_no).setTitle("Step " + (mCurrentStep + 1) + " of " + maxSteps);
+        bott_nav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_previous:
+                        if (mCurrentStep > 0) {
+                            mCurrentStep--;
+                            fragment.releasePlayer();
+                            loadStepData(mCurrentStep);
+                        }
+                        break;
+                    case R.id.action_next:
+                        if (mCurrentStep < maxSteps-1) {
+                            mCurrentStep++;
+                            fragment.releasePlayer();
+                            loadStepData(mCurrentStep);
+                        }
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
-        private void loadStepData(int whatStep) {
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(RECIPE_STEPS, mSteps);
+        outState.putInt(STEP_SELECTED, mCurrentStep);
+        outState.putString(RECIPE_NAME, mRecipeName);
+    }
+
+    private void loadStepData(int whatStep) {
             fragment.setStepDescription(mSteps.get(whatStep).getDescription());
             fragment.setStepVisual(mSteps.get(whatStep));
             bott_nav.getMenu().findItem(R.id.display_step_no).setTitle("Step " + (whatStep + 1) + " of " + maxSteps);

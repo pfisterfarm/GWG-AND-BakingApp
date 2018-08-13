@@ -25,7 +25,9 @@ import com.pfisterfarm.bakingapp.model.Recipe;
 public class RecipeDetailActivity extends AppCompatActivity {
 
     private final static String SCREEN_MODE = "screen_mode";
+    private final static String SAVE_RECIPE = "recipe_name";
     private boolean mTwoPane = false;
+    private Recipe thisRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +57,11 @@ public class RecipeDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            Recipe testRecipe = getIntent().getParcelableExtra(RecipeDetailFragment.ARG_ITEM_ID);
-            Log.d("bakingapp", testRecipe.getName());
-            setTitle(testRecipe.getName());
+            thisRecipe = getIntent().getParcelableExtra(RecipeDetailFragment.ARG_ITEM_ID);
+            setTitle(thisRecipe.getName());
             Bundle arguments = new Bundle();
             arguments.putParcelable(RecipeDetailFragment.ARG_ITEM_ID,
-                    getIntent().getParcelableExtra(RecipeDetailFragment.ARG_ITEM_ID));
+                    thisRecipe);
             arguments.putBoolean(SCREEN_MODE, mTwoPane);
             RecipeDetailFragment fragment = new RecipeDetailFragment();
             fragment.setArguments(arguments);
@@ -73,7 +74,17 @@ public class RecipeDetailActivity extends AppCompatActivity {
                         .add(R.id.recipe_detail_container_twopane, fragment)
                         .commit();
             }
+        } else {
+            thisRecipe = savedInstanceState.getParcelable(SAVE_RECIPE);
+            setTitle(thisRecipe.getName());
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(SAVE_RECIPE, thisRecipe);
     }
 
     @Override
@@ -92,4 +103,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
