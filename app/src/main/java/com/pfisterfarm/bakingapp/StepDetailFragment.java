@@ -55,9 +55,14 @@ public class StepDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            mStep = getArguments().getParcelable(ARG_ITEM_ID);
+        if (savedInstanceState == null) {
+            if (getArguments().containsKey(ARG_ITEM_ID)) {
+                mStep = getArguments().getParcelable(ARG_ITEM_ID);
+            }
+        } else {
+            mStep = savedInstanceState.getParcelable(STEP_SELECTED);
         }
+
 
     }
 
@@ -77,6 +82,12 @@ public class StepDetailFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         releasePlayer();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(STEP_SELECTED, mStep);
     }
 
     public void setStepDescription(String newText) {
@@ -108,6 +119,12 @@ public class StepDetailFragment extends Fragment {
                 stepThumbIV.setVisibility(View.GONE);
             }
         }
+    }
+
+    public void setCurrentStep(Step newStep) {
+        mStep = newStep;
+        setStepDescription(newStep.getDescription());
+        setStepVisual(newStep);
     }
 
     private void initializePlayer(Uri mediaUri) {

@@ -20,6 +20,7 @@ public class StepDetailActivity extends AppCompatActivity {
     private static final String RECIPE_STEPS = "recipe_steps";
     private static final String STEP_SELECTED = "step_selected";
     private static final String RECIPE_NAME = "recipe_name";
+    private static final String STEP_DETAIL_TAG = "step_detail_tag";
 
     private BottomNavigationView bott_nav;
     private ArrayList<Step> mSteps;
@@ -64,7 +65,7 @@ public class StepDetailActivity extends AppCompatActivity {
             fragment = new StepDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.step_fragment_container, fragment)
+                    .add(R.id.step_fragment_container, fragment, STEP_DETAIL_TAG)
                     .commit();
         } else {
             mSteps = savedInstanceState.getParcelableArrayList(RECIPE_STEPS);
@@ -72,6 +73,7 @@ public class StepDetailActivity extends AppCompatActivity {
             mRecipeName = savedInstanceState.getString(RECIPE_NAME);
             setTitle(mRecipeName);
             maxSteps = mSteps.size();
+            fragment = (StepDetailFragment)getSupportFragmentManager().findFragmentByTag(STEP_DETAIL_TAG);
         }
         bott_nav = findViewById(R.id.step_navigation);
         bott_nav.getMenu().findItem(R.id.display_step_no).setTitle("Step " + (mCurrentStep + 1) + " of " + maxSteps);
@@ -108,9 +110,7 @@ public class StepDetailActivity extends AppCompatActivity {
     }
 
     private void loadStepData(int whatStep) {
-            fragment.setStepDescription(mSteps.get(whatStep).getDescription());
-            fragment.setStepVisual(mSteps.get(whatStep));
-            bott_nav.getMenu().findItem(R.id.display_step_no).setTitle("Step " + (whatStep + 1) + " of " + maxSteps);
-
-        }
+        fragment.setCurrentStep(mSteps.get(whatStep));
+        bott_nav.getMenu().findItem(R.id.display_step_no).setTitle("Step " + (whatStep + 1) + " of " + maxSteps);
+    }
 }
