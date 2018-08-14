@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
@@ -38,6 +39,8 @@ import static com.pfisterfarm.bakingapp.RecipeDetailFragment.ARG_ITEM_ID;
 public class StepDetailFragment extends Fragment {
 
     private static final String STEP_SELECTED = "step_selected";
+    private static final String SAVE_POSITION = "save_position";
+    private static final String PLAYING_FLAG = "playing_flag";
 
     private TextView stepInstructionsTV;
     private ImageView stepThumbIV;
@@ -45,6 +48,8 @@ public class StepDetailFragment extends Fragment {
     private int maxSteps;
     private Step mStep;
     private BottomNavigationView bott_nav;
+    private long mSavePosition;
+    private boolean videoWasPlaying = false;
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
 
@@ -61,6 +66,8 @@ public class StepDetailFragment extends Fragment {
             }
         } else {
             mStep = savedInstanceState.getParcelable(STEP_SELECTED);
+            mSavePosition = savedInstanceState.getLong(SAVE_POSITION);
+            videoWasPlaying = savedInstanceState.getBoolean(PLAYING_FLAG);
         }
 
 
@@ -75,12 +82,22 @@ public class StepDetailFragment extends Fragment {
         mPlayerView = rootView.findViewById(R.id.step_video);
         setStepDescription(mStep.getDescription());
         setStepVisual(mStep);
+        if ((mExoPlayer != null) && videoWasPlaying && (mSavePosition != C.TIME_UNSET)) {
+            mExoPlayer.seekTo(mSavePosition);
+        }
         return rootView;
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onPause() {
+        super.onPause();
+        if (mExoPlayer != null) {
+            mSavePosition = mExoPlayer.getCurrentPosition();
+            videoWasPlaying = true;
+        } else {
+            mSavePosition = C.TIME_UNSET;
+            videoWasPlaying = false;
+        }
         releasePlayer();
     }
 
@@ -88,6 +105,8 @@ public class StepDetailFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(STEP_SELECTED, mStep);
+        outState.putLong(SAVE_POSITION, mSavePosition);
+        outState.putBoolean(PLAYING_FLAG, videoWasPlaying);
     }
 
     public void setStepDescription(String newText) {

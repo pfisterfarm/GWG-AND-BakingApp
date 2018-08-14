@@ -52,6 +52,7 @@ public class RecipeDetailFragment extends Fragment {
     private IngredientsRecyclerViewAdapter mIngredientsAdapter;
     private StepsRecyclerViewAdapter mStepsAdapter;
     private boolean mTwoPane;
+    private View rootView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -89,7 +90,11 @@ public class RecipeDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.recipe_detail, container, false);
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.recipe_detail, container, false);
+        } else {
+            ((ViewGroup) container.getParent()).removeView(rootView);
+        }
 
         ingredients_rv = container.findViewById(R.id.ingredients_list);
         mIngredients = mRecipe.getIngredients();
