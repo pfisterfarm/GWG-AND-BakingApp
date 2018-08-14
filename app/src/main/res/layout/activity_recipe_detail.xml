@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:textStyle="bold"
-            android:text="Ingredients:" />
+            android:text="@string/ingredients_label" />
 
         <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:textStyle="bold"
-            android:text="Steps:" />
+            android:text="@string/steps_label" />
 
         <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
