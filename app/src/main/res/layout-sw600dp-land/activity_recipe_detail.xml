@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/recipe_detail_container_twopane"
+        android:id="@+id/recipe_detail_container"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:orientation="vertical">

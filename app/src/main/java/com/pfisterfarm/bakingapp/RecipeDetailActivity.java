@@ -65,15 +65,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
             arguments.putBoolean(SCREEN_MODE, mTwoPane);
             RecipeDetailFragment fragment = new RecipeDetailFragment();
             fragment.setArguments(arguments);
-            if (!mTwoPane) {
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.recipe_detail_container, fragment)
                         .commit();
-            } else {
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.recipe_detail_container_twopane, fragment)
-                        .commit();
-            }
         } else {
             thisRecipe = savedInstanceState.getParcelable(SAVE_RECIPE);
             setTitle(thisRecipe.getName());
