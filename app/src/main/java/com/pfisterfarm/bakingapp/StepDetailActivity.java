@@ -1,8 +1,10 @@
 package com.pfisterfarm.bakingapp;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -112,5 +114,15 @@ public class StepDetailActivity extends AppCompatActivity {
     private void loadStepData(int whatStep) {
         fragment.setCurrentStep(mSteps.get(whatStep));
         bott_nav.getMenu().findItem(R.id.display_step_no).setTitle("Step " + (whatStep + 1) + " of " + maxSteps);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
